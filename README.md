@@ -18,54 +18,66 @@ The registry is available as static JSON files:
 
 ```bash
 # Complete registry
-curl https://registry.elys.network/assets.json
-
-# Mainnet assets only
-curl https://registry.elys.network/assets/mainnet.json
-
-# Specific asset
-curl https://registry.elys.network/assets/cosmos.json
-
+# Mainnet chains and assets only
+curl https://registry.elys.network/mainnet
+# Testnet chains and assets only
+curl https://registry.elys.network/testnet
 # Validation schema
-curl https://registry.elys.network/schema.json
+curl https://registry.elys.network/schema
+# Only mainnet elys assets
+curl https://registry.elys.network/mainnet/elys
 ```
 
 ### Available Endpoints
 
 | Endpoint | Description |
 |----------|-------------|
-| `/assets.json` | Complete registry |
-| `/assets/mainnet.json` | Mainnet assets only |
-| `/assets/testnet.json` | Testnet assets only |
-| `/assets/{asset-key}.json` | Specific asset |
-| `/currencies.json` | List of all currencies |
-| `/schema.json` | JSON Schema for validation |
+| `/mainnet/chains` | Mainnet chains only |
+| `/testnet/chains` | Testnet chains only |
+| `/mainnet/chains/elys` | Mainnet elys assets only |
 
 ## 📊 Data Structure
 
 ```json
 {
-  "assets": {
-    "cosmos": {
-      "chainNetwork": "mainnet",
-      "chainId": "cosmoshub-4",
-      "chainName": "Cosmos Hub",
-      "addressPrefix": "cosmos",
-      "rpcURL": "https://cosmos-rpc.publicnode.com:443",
-      "restURL": "https://cosmos-api.publicnode.com",
+  "chains": {
+    "elys": {
+      "chainId": "elys-1",
+      "chainName": "Elys",
+      "addressPrefix": "elys",
+      "rpcURL": "https://rpc.elys.network:443",
+      "restURL": "https://api.elys.network:443",
       "explorerURL": {
-        "transaction": "https://mintscan.io/cosmos/transactions/{transaction}"
+        "transaction": "https://mainnet.itrocket.net/elys/tx/{transaction}"
+      },
+      "channel": {
+        "source": "",
+        "destination": ""
       },
       "isEnabled": true,
       "priority": 1,
       "currencies": [
         {
-          "coinDenom": "ATOM",
-          "coinMinimalDenom": "uatom",
+          "coinDenom": "ELYS",
+          "coinMinimalDenom": "uelys",
+          "coinIbcDenom": "",
           "coinDecimals": 6,
+          "coinGeckoId": "elys",
+          "coinImageUrl": "/tokens/elys.svg",
           "canSwap": true,
+          "isFeeCurrency": true,
+          "isStakeCurrency": true,
+          "canWithdraw": true,
           "canDeposit": true,
-          "isFeeCurrency": true
+          "canUseLiquidityMining": true,
+          "canUseLeverageLP": false,
+          "canUsePerpetual": false,
+          "canUseVaults": true,
+          "gasPriceStep": {
+            "low": 0.01,
+            "average": 0.025,
+            "high": 0.03
+          }
         }
       ]
     }
@@ -75,56 +87,195 @@ curl https://registry.elys.network/schema.json
 
 ## 🔧 Integration Examples
 
-### JavaScript/TypeScript
+### JavaScript/Node.js
 ```javascript
-const response = await fetch('https://registry.elys.network/assets.json');
+
+const response = await fetch('https://registry.elys.network/mainnet');
 const registry = await response.json();
-const cosmosAsset = registry.assets.cosmos;
+
+const elysChain = registry.chains.elys;
+console.log(`RPC URL: ${elysChain.rpcURL}`);
+
+const swappableCurrencies = Object.values(registry.chains)
+  .flatMap(chain => chain.currencies)
+  .filter(currency => currency.canSwap);
 ```
 
 ### Go
 ```go
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
 type AssetRegistry struct {
-    Assets map[string]ChainAsset `json:"assets"`
+    Chains map[string]ChainAsset `json:"chains"`
 }
 
-resp, _ := http.Get("https://registry.elys.network/assets.json")
-var registry AssetRegistry
-json.NewDecoder(resp.Body).Decode(&registry)
+type ChainAsset struct {
+    ChainID      string     `json:"chainId"`
+    ChainName    string     `json:"chainName"`
+    RPCURL       string     `json:"rpcURL"`
+    RestURL      string     `json:"restURL"`
+    Currencies   []Currency `json:"currencies"`
+}
+
+type Currency struct {
+    CoinDenom        string  `json:"coinDenom"`
+    CoinMinimalDenom string  `json:"coinMinimalDenom"`
+    CoinDecimals     int     `json:"coinDecimals"`
+    CanSwap          bool    `json:"canSwap"`
+    CanDeposit       bool    `json:"canDeposit"`
+}
+
+func main() {
+    resp, err := http.Get("https://registry.elys.network/mainnet")
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+
+    var registry AssetRegistry
+    json.NewDecoder(resp.Body).Decode(&registry)
+
+    // Usar la chain de Elys
+    elysChain := registry.Chains["elys"]
+    fmt.Printf("Elys RPC: %s\n", elysChain.RPCURL)
+}
 ```
 
 ### Java
 ```java
-ObjectMapper mapper = new ObjectMapper();
-AssetRegistry registry = mapper.readValue(
-    new URL("https://registry.elys.network/assets.json"), 
-    AssetRegistry.class
-);
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+public class ElysRegistryClient {
+    private static final String REGISTRY_URL = "https://registry.elys.network/mainnet";
+    
+    public static class AssetRegistry {
+        public Map<String, ChainAsset> chains;
+    }
+    
+    public static class ChainAsset {
+        public String chainId;
+        public String chainName;
+        public String rpcURL;
+        public String restURL;
+        public List<Currency> currencies;
+    }
+    
+    public static class Currency {
+        public String coinDenom;
+        public String coinMinimalDenom;
+        public int coinDecimals;
+        public boolean canSwap;
+        public boolean canDeposit;
+    }
+    
+    public static void main(String[] args) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(REGISTRY_URL))
+            .build();
+            
+        HttpResponse<String> response = client.send(request, 
+            HttpResponse.BodyHandlers.ofString());
+            
+        ObjectMapper mapper = new ObjectMapper();
+        AssetRegistry registry = mapper.readValue(response.body(), AssetRegistry.class);
+        
+        ChainAsset elys = registry.chains.get("elys");
+        System.out.println("Elys RPC: " + elys.rpcURL);
+    }
+}
 ```
 
 ### Python
 ```python
 import requests
-registry = requests.get("https://registry.elys.network/assets.json").json()
-cosmos_asset = registry["assets"]["cosmos"]
-```
+import json
+from dataclasses import dataclass
+from typing import List, Dict, Optional
 
-### C++
-```cpp
-// Usando nlohmann/json
-json registry = json::parse(curl_response);
-auto cosmos = registry["assets"]["cosmos"];
+@dataclass
+class Currency:
+    coinDenom: str
+    coinMinimalDenom: str
+    coinDecimals: int
+    canSwap: bool
+    canDeposit: bool
+
+@dataclass
+class ChainAsset:
+    chainId: str
+    chainName: str
+    rpcURL: str
+    restURL: str
+    currencies: List[Currency]
+
+@dataclass
+class AssetRegistry:
+    chains: Dict[str, ChainAsset]
+
+def load_registry() -> AssetRegistry:
+    response = requests.get("https://registry.elys.network/mainnet")
+    data = response.json()
+    
+    chains = {}
+    for key, chain_data in data["chains"].items():
+        currencies = [Currency(**curr) for curr in chain_data["currencies"]]
+        chains[key] = ChainAsset(**{**chain_data, "currencies": currencies})
+    
+    return AssetRegistry(chains=chains)
+
+# Uso
+registry = load_registry()
+elys_chain = registry.chains["elys"]
+print(f"Elys RPC: {elys_chain.rpcURL}")
 ```
 
 ### Rust
 ```rust
-#[derive(Deserialize)]
-struct AssetRegistry {
-    assets: HashMap<String, ChainAsset>,
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Currency {
+    #[serde(rename = "coinDenom")]
+    coin_denom: String,
+    #[serde(rename = "coinMinimalDenom")]
+    coin_minimal_denom: String,
+    #[serde(rename = "coinDecimals")]
+    coin_decimals: u8,
+    #[serde(rename = "canSwap")]
+    can_swap: bool,
+    #[serde(rename = "canDeposit")]
+    can_deposit: bool,
 }
 
-let registry: AssetRegistry = reqwest::get("https://registry.elys.network/assets.json")
-    .await?.json().await?;
+#[derive(Serialize, Deserialize, Debug)]
+struct ChainAsset {
+    #[serde(rename = "chainId")]
+    chain_id: String,
+    #[serde(rename = "chainName")]
+    chain_name: String,
+    #[serde(rename = "rpcURL")]
+    rpc_url: String,
+    #[serde(rename = "restURL")]
+    rest_url: String,
+    currencies: Vec<Currency>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct AssetRegistry {
+    chains: HashMap# API Endpoints y Consumo Multi-Plataforma
+
 ```
 
 ## 📁 Repository Structure
@@ -132,10 +283,8 @@ let registry: AssetRegistry = reqwest::get("https://registry.elys.network/assets
 ```
 elys-asset-registry/
 ├── 📁 data/
-│   ├── assets.json              # Main registry
 │   ├── mainnet.json            # Mainnet assets only
-│   ├── testnet.json            # Testnet assets only
-│   └── currencies.json         # Currencies list
+│   └── testnet.json            # Testnet assets only
 ├── 📁 schema/
 │   └── asset-registry.schema.json  # JSON Schema
 ├── 📁 scripts/
@@ -188,23 +337,52 @@ ajv validate -s schema/asset-registry.schema.json -d data/assets.json
 3. Run validation: `./scripts/validate.sh`
 4. Create pull request
 
-### Asset Schema
+### Chain Schema
 
-Each asset must include:
+Each chain must include:
 
 ```json
-{
-  "chainNetwork": "mainnet|testnet",
-  "chainId": "unique-chain-id",
-  "chainName": "Human Readable Name",
-  "addressPrefix": "bech32prefix",
-  "rpcURL": "https://rpc.example.com",
-  "restURL": "https://api.example.com",
-  "explorerURL": {
-    "transaction": "https://explorer.com/tx/{transaction}"
-  },
-  "currencies": [...]
-}
+    "elys": {
+      "chainId": "elys-1",
+      "chainName": "Elys",
+      "addressPrefix": "elys",
+      "rpcURL": "https://rpc.elys.network:443",
+      "restURL": "https://api.elys.network:443",
+      "explorerURL": {
+        "transaction": "https://mainnet.itrocket.net/elys/tx/{transaction}"
+      },
+      "channel": {
+        "source": "",
+        "destination": ""
+      },
+      "isEnabled": true,
+      "priority": 1,
+      "currencies": [
+        {
+          "coinDenom": "ELYS",
+          "coinMinimalDenom": "uelys",
+          "coinIbcDenom": "",
+          "coinDecimals": 6,
+          "coinGeckoId": "elys",
+          "coinImageUrl": "/tokens/elys.svg",
+          "canSwap": true,
+          "isFeeCurrency": true,
+          "isStakeCurrency": true,
+          "canWithdraw": true,
+          "canDeposit": true,
+          "canUseLiquidityMining": true,
+          "canUseLeverageLP": false,
+          "canUsePerpetual": false,
+          "canUseVaults": true,
+          "gasPriceStep": {
+            "low": 0.01,
+            "average": 0.025,
+            "high": 0.03
+          }
+        }
+      ]
+    }
+  }
 ```
 
 ### Quality Standards
