@@ -1,9 +1,5 @@
 # Elys Asset Registry
 
-[![Validation](https://github.com/elys-network/elys-asset-registry/actions/workflows/validate.yml/badge.svg)](https://github.com/elys-network/elys-asset-registry/actions/workflows/validate.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Registry Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fregistry.elys.network%2Fassets.json&query=%24.version&label=Registry%20Version)](https://registry.elys.network/assets.json)
-
 Official Elys Network asset registry providing standardized blockchain and token configurations for all Elys ecosystem projects. This registry serves as the single source of truth for chain metadata, RPC endpoints, token information, and feature capabilities across the entire Elys ecosystem.
 
 ## 🎯 Purpose
