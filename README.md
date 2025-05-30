@@ -333,7 +333,7 @@ ajv validate -s schema/asset-registry.schema.json -d data/assets.json
 ### Adding New Assets
 
 1. Fork the repository
-2. Add asset to `data/assets.json` following the schema
+2. Add chains or asset to `data/mainnet.json` following the schema
 3. Run validation: `./scripts/validate.sh`
 4. Create pull request
 
@@ -382,7 +382,6 @@ Each chain must include:
         }
       ]
     }
-  }
 ```
 
 ### Quality Standards
