@@ -45,8 +45,6 @@ curl https://registry.elys.network/schema.json
 
 ```json
 {
-  "version": "1.0.0",
-  "lastUpdated": "2025-05-30T00:00:00Z",
   "assets": {
     "cosmos": {
       "chainNetwork": "mainnet",
@@ -157,6 +155,7 @@ elys-asset-registry/
 ├── 📄 README.md
 ├── 📄 CONTRIBUTING.md
 └── 📄 CHANGELOG.md
+└── 📄 .version
 ```
 
 ## ✅ Validation
