@@ -39,15 +39,15 @@
                 },
                 "rpcURL": {
                     "type": "string",
-                    "format": "uri",
                     "description": "RPC endpoint URL with port",
-                    "pattern": "^https?://.*:(443|80|[0-9]{1,5})$"
+                    "pattern": "^https?://[a-zA-Z0-9.-]+:(443|80|[0-9]{1,5})$",
+                    "minLength": 1
                 },
                 "restURL": {
                     "type": "string",
-                    "format": "uri",
                     "description": "REST API endpoint URL with port",
-                    "pattern": "^https?://.*:(443|80|[0-9]{1,5})$"
+                    "pattern": "^https?://[a-zA-Z0-9.-]+:(443|80|[0-9]{1,5})$",
+                    "minLength": 1
                 },
                 "explorerURL": {
                     "$ref": "#/definitions/ExplorerURL"
