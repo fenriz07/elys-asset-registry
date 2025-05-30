@@ -1,0 +1,266 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Elys Asset Registry Schema",
+    "type": "object",
+    "properties": {
+        "chains": {
+            "type": "object",
+            "patternProperties": {
+                "^[a-z0-9-]+$": {
+                    "$ref": "#/definitions/ChainAsset"
+                }
+            },
+            "description": "Registry of chain assets keyed by chain identifier",
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "chains"
+    ],
+    "additionalProperties": false,
+    "definitions": {
+        "ChainAsset": {
+            "type": "object",
+            "properties": {
+                "chainId": {
+                    "type": "string",
+                    "description": "Unique chain identifier",
+                    "minLength": 1
+                },
+                "chainName": {
+                    "type": "string",
+                    "description": "Human-readable chain name",
+                    "minLength": 1
+                },
+                "addressPrefix": {
+                    "type": "string",
+                    "description": "Bech32 address prefix or address format",
+                    "minLength": 1
+                },
+                "rpcURL": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "RPC endpoint URL with port",
+                    "pattern": "^https?://.*:(443|80|[0-9]{1,5})$"
+                },
+                "restURL": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "REST API endpoint URL with port",
+                    "pattern": "^https?://.*:(443|80|[0-9]{1,5})$"
+                },
+                "explorerURL": {
+                    "$ref": "#/definitions/ExplorerURL"
+                },
+                "channel": {
+                    "$ref": "#/definitions/Channel"
+                },
+                "isEnabled": {
+                    "type": "boolean",
+                    "description": "Whether this chain is currently enabled",
+                    "default": true
+                },
+                "priority": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "description": "Priority for ordering (higher = more important)"
+                },
+                "currencies": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Currency"
+                    },
+                    "minItems": 1,
+                    "description": "Array of supported currencies on this chain"
+                }
+            },
+            "required": [
+                "chainId",
+                "chainName",
+                "addressPrefix",
+                "rpcURL",
+                "restURL",
+                "explorerURL",
+                "channel",
+                "isEnabled",
+                "priority",
+                "currencies"
+            ],
+            "additionalProperties": false
+        },
+        "Currency": {
+            "type": "object",
+            "properties": {
+                "coinDenom": {
+                    "type": "string",
+                    "description": "Display denomination (e.g., ELYS, ATOM)",
+                    "pattern": "^[A-Z0-9]+$",
+                    "minLength": 1,
+                    "maxLength": 10
+                },
+                "coinMinimalDenom": {
+                    "type": "string",
+                    "description": "Minimal denomination (e.g., uelys, uatom)",
+                    "minLength": 1
+                },
+                "coinIbcDenom": {
+                    "type": "string",
+                    "description": "IBC denomination hash (can be empty for native tokens)",
+                    "pattern": "^(ibc/[A-F0-9]{64}|0x[a-fA-F0-9]{40}|)$"
+                },
+                "coinDecimals": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 18,
+                    "description": "Number of decimal places"
+                },
+                "coinGeckoId": {
+                    "type": "string",
+                    "description": "CoinGecko API identifier (can be empty)",
+                    "pattern": "^[a-z0-9-]*$"
+                },
+                "coinImageUrl": {
+                    "type": "string",
+                    "description": "Path or URL to token image",
+                    "pattern": "^(/|https?://)",
+                    "minLength": 1
+                },
+                "canSwap": {
+                    "type": "boolean",
+                    "description": "Available for swapping"
+                },
+                "isFeeCurrency": {
+                    "type": "boolean",
+                    "description": "Can be used for transaction fees"
+                },
+                "isStakeCurrency": {
+                    "type": "boolean",
+                    "description": "Can be used for staking"
+                },
+                "canWithdraw": {
+                    "type": "boolean",
+                    "description": "Can be withdrawn"
+                },
+                "canDeposit": {
+                    "type": "boolean",
+                    "description": "Can be deposited"
+                },
+                "canUseLiquidityMining": {
+                    "type": "boolean",
+                    "description": "Available for liquidity mining"
+                },
+                "canUseLeverageLP": {
+                    "type": "boolean",
+                    "description": "Available for leveraged LP"
+                },
+                "canUsePerpetual": {
+                    "type": "boolean",
+                    "description": "Available for perpetual trading"
+                },
+                "canUseVaults": {
+                    "type": "boolean",
+                    "description": "Available for vault strategies"
+                },
+                "gasPriceStep": {
+                    "$ref": "#/definitions/GasPriceStep"
+                }
+            },
+            "required": [
+                "coinDenom",
+                "coinMinimalDenom",
+                "coinIbcDenom",
+                "coinDecimals",
+                "coinGeckoId",
+                "coinImageUrl",
+                "canSwap",
+                "isFeeCurrency",
+                "isStakeCurrency",
+                "canWithdraw",
+                "canDeposit",
+                "canUseLiquidityMining",
+                "canUseLeverageLP",
+                "canUsePerpetual",
+                "canUseVaults",
+                "gasPriceStep"
+            ],
+            "additionalProperties": false
+        },
+        "GasPriceStep": {
+            "type": "object",
+            "properties": {
+                "low": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Low gas price"
+                },
+                "average": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Average gas price"
+                },
+                "high": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "High gas price"
+                }
+            },
+            "required": [
+                "low",
+                "average",
+                "high"
+            ],
+            "additionalProperties": false
+        },
+        "Channel": {
+            "type": "object",
+            "properties": {
+                "source": {
+                    "type": "string",
+                    "description": "Source IBC channel (can be empty)",
+                    "pattern": "^(channel-\\d+|)$"
+                },
+                "destination": {
+                    "type": "string",
+                    "description": "Destination IBC channel (can be empty)",
+                    "pattern": "^(channel-\\d+|)$"
+                }
+            },
+            "required": [
+                "source",
+                "destination"
+            ],
+            "additionalProperties": false
+        },
+        "ExplorerURL": {
+            "type": "object",
+            "properties": {
+                "transaction": {
+                    "type": "string",
+                    "description": "URL template for transactions (use {transaction} placeholder)",
+                    "pattern": "^https?://.*\\{transaction\\}.*$",
+                    "minLength": 1
+                },
+                "account": {
+                    "type": "string",
+                    "description": "URL template for accounts (use {account} placeholder)",
+                    "pattern": "^https?://.*\\{account\\}.*$"
+                },
+                "validator": {
+                    "type": "string",
+                    "description": "URL template for validators (use {validator} placeholder)",
+                    "pattern": "^https?://.*\\{validator\\}.*$"
+                },
+                "block": {
+                    "type": "string",
+                    "description": "URL template for blocks (use {block} placeholder)",
+                    "pattern": "^https?://.*\\{block\\}.*$"
+                }
+            },
+            "required": [
+                "transaction"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

@@ -1,0 +1,276 @@
+# .github/workflows/validate-registry.yml
+name: Validate Asset Registry
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'data/**'
+      - 'schema/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'data/**'
+      - 'schema/**'
+  workflow_dispatch:
+
+jobs:
+  validate-schema:
+    name: Validate JSON Schema
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install validation tools
+        run: |
+          npm install -g ajv-cli@5.0.0
+          npm install -g jsonlint@1.6.3
+          
+      - name: Validate JSON syntax
+        run: |
+          echo "🔍 Validating JSON syntax..."
+          
+          # Validate mainnet.json syntax
+          if [ -f "data/mainnet.json" ]; then
+            echo "✅ Checking mainnet.json syntax..."
+            jsonlint data/mainnet.json
+          else
+            echo "❌ mainnet.json not found"
+            exit 1
+          fi
+          
+          # Validate testnet.json syntax
+          if [ -f "data/testnet.json" ]; then
+            echo "✅ Checking testnet.json syntax..."
+            jsonlint data/testnet.json
+          else
+            echo "❌ testnet.json not found"
+            exit 1
+          fi
+          
+          # Validate schema syntax
+          if [ -f "schema/registry.schema.json" ]; then
+            echo "✅ Checking schema syntax..."
+            jsonlint schema/registry.schema.json
+          else
+            echo "❌ registry.schema.json not found"
+            exit 1
+          fi
+          
+      - name: Validate against JSON Schema
+        run: |
+          echo "🔍 Validating against JSON Schema..."
+          
+          # Validate mainnet.json against schema
+          echo "✅ Validating mainnet.json against schema..."
+          ajv validate \
+            --spec=draft7 \
+            --verbose \
+            -s schema/registry.schema.json \
+            -d data/mainnet.json
+            
+          # Validate testnet.json against schema
+          echo "✅ Validating testnet.json against schema..."
+          ajv validate \
+            --spec=draft7 \
+            --verbose \
+            -s schema/registry.schema.json \
+            -d data/testnet.json
+            
+      - name: Validate business rules
+        run: |
+          echo "🔍 Validating business rules..."
+          
+          # Check for duplicate chain IDs across networks
+          echo "✅ Checking for duplicate chain IDs..."
+          
+          MAINNET_CHAIN_IDS=$(jq -r '.chains[].chainId' data/mainnet.json | sort)
+          TESTNET_CHAIN_IDS=$(jq -r '.chains[].chainId' data/testnet.json | sort)
+          
+          # Check for duplicates within mainnet
+          MAINNET_DUPLICATES=$(echo "$MAINNET_CHAIN_IDS" | uniq -d)
+          if [ ! -z "$MAINNET_DUPLICATES" ]; then
+            echo "❌ Duplicate chain IDs found in mainnet: $MAINNET_DUPLICATES"
+            exit 1
+          fi
+          
+          # Check for duplicates within testnet
+          TESTNET_DUPLICATES=$(echo "$TESTNET_CHAIN_IDS" | uniq -d)
+          if [ ! -z "$TESTNET_DUPLICATES" ]; then
+            echo "❌ Duplicate chain IDs found in testnet: $TESTNET_DUPLICATES"
+            exit 1
+          fi
+          
+          # Check that all RPC/REST URLs are reachable (optional)
+          echo "✅ Checking URL accessibility..."
+          
+          # Extract and test mainnet URLs
+          jq -r '.chains[] | "\(.rpcURL) \(.restURL)"' data/mainnet.json | while read rpc rest; do
+            echo "Testing $rpc..."
+            if ! curl -s --connect-timeout 10 --max-time 30 "$rpc" > /dev/null; then
+              echo "⚠️  Warning: $rpc may not be accessible"
+            fi
+          done
+          
+      - name: Generate validation report
+        if: always()
+        run: |
+          echo "📊 Validation Report" > validation-report.md
+          echo "===================" >> validation-report.md
+          echo "" >> validation-report.md
+          echo "**Date:** $(date)" >> validation-report.md
+          echo "**Commit:** ${{ github.sha }}" >> validation-report.md
+          echo "" >> validation-report.md
+          
+          # Count assets
+          MAINNET_COUNT=$(jq '.chains | length' data/mainnet.json)
+          TESTNET_COUNT=$(jq '.chains | length' data/testnet.json)
+          
+          echo "**Statistics:**" >> validation-report.md
+          echo "- Mainnet chains: $MAINNET_COUNT" >> validation-report.md
+          echo "- Testnet chains: $TESTNET_COUNT" >> validation-report.md
+          
+          # Count currencies
+          MAINNET_CURRENCIES=$(jq '[.chains[].currencies[]] | length' data/mainnet.json)
+          TESTNET_CURRENCIES=$(jq '[.chains[].currencies[]] | length' data/testnet.json)
+          
+          echo "- Mainnet currencies: $MAINNET_CURRENCIES" >> validation-report.md
+          echo "- Testnet currencies: $TESTNET_CURRENCIES" >> validation-report.md
+          echo "" >> validation-report.md
+          
+          echo "**Chain Status:**" >> validation-report.md
+          echo "| Chain | Network | Enabled | Priority |" >> validation-report.md
+          echo "|-------|---------|---------|----------|" >> validation-report.md
+          
+          # Mainnet chains
+          jq -r '.chains | to_entries[] | "| \(.key) | mainnet | \(.value.isEnabled) | \(.value.priority) |"' data/mainnet.json >> validation-report.md
+          
+          # Testnet chains  
+          jq -r '.chains | to_entries[] | "| \(.key) | testnet | \(.value.isEnabled) | \(.value.priority) |"' data/testnet.json >> validation-report.md
+          
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: validation-report.md
+          retention-days: 30
+          
+      - name: Comment PR with validation results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            try {
+              const report = fs.readFileSync('validation-report.md', 'utf8');
+              
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## 🔍 Registry Validation Report\n\n${report}`
+              });
+            } catch (error) {
+              console.log('Could not post comment:', error);
+            }
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: validate-schema
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Scan for sensitive data
+        run: |
+          echo "🔒 Scanning for sensitive data..."
+          
+          # Check for potential private keys or secrets
+          if grep -r -i "private\|secret\|key\|password" data/ --exclude-dir=.git; then
+            echo "⚠️  Warning: Potential sensitive data found"
+          else
+            echo "✅ No sensitive data detected"
+          fi
+          
+          # Check for suspicious URLs or IPs
+          if grep -r -E "(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.)" data/; then
+            echo "⚠️  Warning: Local/private network addresses found"
+          else
+            echo "✅ No local network addresses found"
+          fi
+          
+      - name: Validate SSL certificates
+        run: |
+          echo "🔒 Validating SSL certificates..."
+          
+          # Extract HTTPS URLs and check certificates
+          jq -r '.chains[] | "\(.rpcURL) \(.restURL)"' data/mainnet.json | \
+          grep -E '^https://' | \
+          while read url; do
+            domain=$(echo "$url" | sed 's|https://||' | sed 's|:.*||')
+            echo "Checking SSL for $domain..."
+            
+            if ! echo | timeout 10 openssl s_client -connect "$domain:443" -servername "$domain" 2>/dev/null | grep -q "Verify return code: 0"; then
+              echo "⚠️  Warning: SSL certificate issue for $domain"
+            fi
+          done
+
+  performance-test:
+    name: Performance Test
+    runs-on: ubuntu-latest
+    needs: validate-schema
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Test endpoint response times
+        run: |
+          echo "⚡ Testing endpoint performance..."
+          
+          # Test RPC endpoints
+          jq -r '.chains[] | "\(.chainName): \(.rpcURL)"' data/mainnet.json | while IFS=': ' read name url; do
+            echo "Testing $name ($url)..."
+            
+            response_time=$(curl -w "%{time_total}" -s -o /dev/null --connect-timeout 10 --max-time 30 "$url" || echo "timeout")
+            
+            if [ "$response_time" = "timeout" ]; then
+              echo "❌ $name: Timeout"
+            elif (( $(echo "$response_time > 5.0" | bc -l) )); then
+              echo "⚠️  $name: Slow response (${response_time}s)"
+            else
+              echo "✅ $name: Fast response (${response_time}s)"
+            fi
+          done
+          
+      - name: File size check
+        run: |
+          echo "📊 Checking file sizes..."
+          
+          MAINNET_SIZE=$(stat -f%z data/mainnet.json 2>/dev/null || stat -c%s data/mainnet.json)
+          TESTNET_SIZE=$(stat -f%z data/testnet.json 2>/dev/null || stat -c%s data/testnet.json)
+          
+          echo "Mainnet.json size: ${MAINNET_SIZE} bytes"
+          echo "Testnet.json size: ${TESTNET_SIZE} bytes"
+          
+          # Warn if files are getting too large (> 1MB)
+          if [ "$MAINNET_SIZE" -gt 1048576 ]; then
+            echo "⚠️  Warning: mainnet.json is larger than 1MB"
+          fi
+          
+          if [ "$TESTNET_SIZE" -gt 1048576 ]; then
+            echo "⚠️  Warning: testnet.json is larger than 1MB"
+          fi
