@@ -23,15 +23,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          
-      - name: Install validation tools
+      - name:  Install Node.js and tools
         run: |
-          npm install -g ajv-cli@5.0.0
-          npm install -g jsonlint@1.6.3
+            node --version
+            npm --version
+            npm install -g ajv-cli@5.0.0
+            npm install -g jsonlint@1.6.3
           
       - name: Validate JSON syntax
         run: |
