@@ -64,13 +64,13 @@ curl https://registry.elys.network/mainnet/elys
           "coinDecimals": 6,
           "coinGeckoId": "elys",
           "coinImageUrl": "/tokens/elys.svg",
-          "canSwap": true,
           "isFeeCurrency": true,
-          "isStakeCurrency": true,
+          "isStakeCurrency": false,
+          "canSwap": true,
           "canWithdraw": true,
           "canDeposit": true,
           "canUseLiquidityMining": true,
-          "canUseLeverageLP": false,
+          "canUseLeverageLP": true,
           "canUsePerpetual": false,
           "canUseVaults": true,
           "gasPriceStep": {
@@ -85,7 +85,7 @@ curl https://registry.elys.network/mainnet/elys
 }
 ```
 
-## 🔧 Integration Examples
+## 🔧 Integration Examplesç
 
 ### JavaScript/Node.js
 ```javascript
@@ -277,20 +277,19 @@ struct AssetRegistry {
     chains: HashMap# API Endpoints y Consumo Multi-Plataforma
 
 ```
-
 ## 📁 Repository Structure
 
 ```
 elys-asset-registry/
 ├── 📁 data/
-│   ├── mainnet.json            # Mainnet assets only
-│   └── testnet.json            # Testnet assets only
+│   ├── 📁 mainnet/       
+│   ├──── elys.json
+│   ├──── cosmos.json
+│   ├── 📁 testnet/
+│   ├──── elys.json
+│   ├──── cosmos.json              
 ├── 📁 schema/
 │   └── asset-registry.schema.json  # JSON Schema
-├── 📁 scripts/
-│   ├── validate.sh             # Validation script
-│   ├── generate-splits.sh      # Generate files by network
-│   └── update-version.sh       # Update version
 ├── 📁 examples/
 │   ├── javascript/             # JavaScript examples
 │   ├── go/                     # Go examples
@@ -299,25 +298,10 @@ elys-asset-registry/
 │   └── rust/                   # Rust examples
 ├── 📁 .github/
 │   └── workflows/
-│       ├── validate.yml        # CI for validation
-│       └── deploy.yml          # Automatic deployment
-├── 📄 README.md
-├── 📄 CONTRIBUTING.md
-└── 📄 CHANGELOG.md
-└── 📄 .version
-```
+│       └─ validate-registry.yml        CI for validatio     
+├──📄 .version
+└──📄 README.md
 
-## ✅ Validation
-
-The registry includes automatic validation:
-
-```bash
-# Validate JSON structure
-./scripts/validate.sh
-
-# Verify against schema
-ajv validate -s schema/asset-registry.schema.json -d data/assets.json
-```
 
 ### Validation Rules
 
@@ -333,55 +317,52 @@ ajv validate -s schema/asset-registry.schema.json -d data/assets.json
 ### Adding New Assets
 
 1. Fork the repository
-2. Add chains or asset to `data/mainnet.json` following the schema
-3. Run validation: `./scripts/validate.sh`
-4. Create pull request
+2. Add asset to `data/mainnet/chain-key.json` or `data/testnet/chain-key.json` following the schema
+3. Create pull request
 
-### Chain Schema
+### Chain Asset Schema
 
-Each chain must include:
+Each chain asset must include:
 
 ```json
-    "elys": {
-      "chainId": "elys-1",
-      "chainName": "Elys",
-      "addressPrefix": "elys",
-      "rpcURL": "https://rpc.elys.network:443",
-      "restURL": "https://api.elys.network:443",
-      "explorerURL": {
+{
+    "chainId": "elys-1",
+    "chainName": "Elys",
+    "addressPrefix": "elys",
+    "rpcURL": "https://rpc.elys.network:443",
+    "restURL": "https://api.elys.network:443",
+    "explorerURL": {
         "transaction": "https://mainnet.itrocket.net/elys/tx/{transaction}"
-      },
-      "channel": {
+    },
+    "channel": {
         "source": "",
         "destination": ""
-      },
-      "isEnabled": true,
-      "priority": 1,
-      "currencies": [
+    },
+    "currencies": [
         {
-          "coinDenom": "ELYS",
-          "coinMinimalDenom": "uelys",
-          "coinIbcDenom": "",
-          "coinDecimals": 6,
-          "coinGeckoId": "elys",
-          "coinImageUrl": "/tokens/elys.svg",
-          "canSwap": true,
-          "isFeeCurrency": true,
-          "isStakeCurrency": true,
-          "canWithdraw": true,
-          "canDeposit": true,
-          "canUseLiquidityMining": true,
-          "canUseLeverageLP": false,
-          "canUsePerpetual": false,
-          "canUseVaults": true,
-          "gasPriceStep": {
-            "low": 0.01,
-            "average": 0.025,
-            "high": 0.03
-          }
+            "coinDenom": "ELYS",
+            "coinDisplayDenom": "Elys",
+            "coinMinimalDenom": "uelys",
+            "coinIbcDenom": "",
+            "coinDecimals": 6,
+            "coinGeckoId": "elys",
+            "canSwap": true,
+            "isFeeCurrency": true,
+            "isStakeCurrency": true,
+            "canWithdraw": true,
+            "canDeposit": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": false,
+            "canUsePerpetual": false,
+            "canUseVaults": true,
+            "gasPriceStep": {
+                "low": 0.01,
+                "average": 0.025,
+                "high": 0.03
+            }
         }
-      ]
-    }
+    ]
+}
 ```
 
 ### Quality Standards
@@ -400,7 +381,6 @@ We follow [Semantic Versioning](https://semver.org/):
 - **MINOR**: New assets or compatible features
 - **PATCH**: Bug fixes and data updates
 
-
 ## 🛠️ Used By
 
 This registry is used by:
@@ -414,5 +394,5 @@ This registry is used by:
 ## 📊 Statistics
 
 - 📦 **Total Assets**: Multiple supported chains
-- 🌍 **Networks**: Mainnet, Testnet
+- 🌍 **Networks**: Mainnet, Testnet, Devnet
 - 🔄 **Update Frequency**: Updates as needed

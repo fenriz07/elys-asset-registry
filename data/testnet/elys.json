@@ -1,0 +1,38 @@
+{
+    "chainId": "elys-1",
+    "chainName": "Elys",
+    "addressPrefix": "elys",
+    "rpcURL": "https://rpc.elys.network:443",
+    "restURL": "https://api.elys.network:443",
+    "explorerURL": {
+        "transaction": "https://mainnet.itrocket.net/elys/tx/{transaction}"
+    },
+    "channel": {
+        "source": "",
+        "destination": ""
+    },
+    "currencies": [
+        {
+            "coinDenom": "ELYS",
+            "coinDisplayDenom": "Elys",
+            "coinMinimalDenom": "uelys",
+            "coinIbcDenom": "",
+            "coinDecimals": 6,
+            "coinGeckoId": "elys",
+            "canSwap": true,
+            "isFeeCurrency": true,
+            "isStakeCurrency": true,
+            "canWithdraw": true,
+            "canDeposit": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": false,
+            "canUsePerpetual": false,
+            "canUseVaults": true,
+            "gasPriceStep": {
+                "low": 0.01,
+                "average": 0.025,
+                "high": 0.03
+            }
+        }
+    ]
+}

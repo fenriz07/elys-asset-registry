@@ -1,94 +1,62 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Elys Asset Registry Schema",
+    "title": "Elys Chain Asset Schema",
     "type": "object",
     "properties": {
-        "chains": {
-            "type": "object",
-            "patternProperties": {
-                "^[a-z0-9-]+$": {
-                    "$ref": "#/definitions/ChainAsset"
-                }
+        "chainId": {
+            "type": "string",
+            "description": "Unique chain identifier",
+            "minLength": 1
+        },
+        "chainName": {
+            "type": "string",
+            "description": "Human-readable chain name",
+            "minLength": 1
+        },
+        "addressPrefix": {
+            "type": "string",
+            "description": "Bech32 address prefix or address format",
+            "minLength": 1
+        },
+        "rpcURL": {
+            "type": "string",
+            "description": "RPC endpoint URL with port",
+            "pattern": "^https?://[a-zA-Z0-9.-]+:(443|80|[0-9]{1,5})$",
+            "minLength": 1
+        },
+        "restURL": {
+            "type": "string",
+            "description": "REST API endpoint URL with port",
+            "pattern": "^https?://[a-zA-Z0-9.-]+:(443|80|[0-9]{1,5})$",
+            "minLength": 1
+        },
+        "explorerURL": {
+            "$ref": "#/definitions/ExplorerURL"
+        },
+        "channel": {
+            "$ref": "#/definitions/Channel"
+        },
+        "currencies": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Currency"
             },
-            "description": "Registry of chain assets keyed by chain identifier",
-            "additionalProperties": false
+            "minItems": 1,
+            "description": "Array of supported currencies on this chain"
         }
     },
     "required": [
-        "chains"
+        "chainId",
+        "chainName",
+        "addressPrefix",
+        "rpcURL",
+        "restURL",
+        "explorerURL",
+        "channel",
+        "currencies"
     ],
     "additionalProperties": false,
     "definitions": {
-        "ChainAsset": {
-            "type": "object",
-            "properties": {
-                "chainId": {
-                    "type": "string",
-                    "description": "Unique chain identifier",
-                    "minLength": 1
-                },
-                "chainName": {
-                    "type": "string",
-                    "description": "Human-readable chain name",
-                    "minLength": 1
-                },
-                "addressPrefix": {
-                    "type": "string",
-                    "description": "Bech32 address prefix or address format",
-                    "minLength": 1
-                },
-                "rpcURL": {
-                    "type": "string",
-                    "description": "RPC endpoint URL with port",
-                    "pattern": "^https?://[a-zA-Z0-9.-]+:(443|80|[0-9]{1,5})$",
-                    "minLength": 1
-                },
-                "restURL": {
-                    "type": "string",
-                    "description": "REST API endpoint URL with port",
-                    "pattern": "^https?://[a-zA-Z0-9.-]+:(443|80|[0-9]{1,5})$",
-                    "minLength": 1
-                },
-                "explorerURL": {
-                    "$ref": "#/definitions/ExplorerURL"
-                },
-                "channel": {
-                    "$ref": "#/definitions/Channel"
-                },
-                "isEnabled": {
-                    "type": "boolean",
-                    "description": "Whether this chain is currently enabled",
-                    "default": true
-                },
-                "priority": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 100,
-                    "description": "Priority for ordering (higher = more important)"
-                },
-                "currencies": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Currency"
-                    },
-                    "minItems": 1,
-                    "description": "Array of supported currencies on this chain"
-                }
-            },
-            "required": [
-                "chainId",
-                "chainName",
-                "addressPrefix",
-                "rpcURL",
-                "restURL",
-                "explorerURL",
-                "channel",
-                "isEnabled",
-                "priority",
-                "currencies"
-            ],
-            "additionalProperties": false
-        },
         "Currency": {
             "type": "object",
             "properties": {
@@ -98,6 +66,11 @@
                     "pattern": "^[A-Z0-9]+$",
                     "minLength": 1,
                     "maxLength": 10
+                },
+                "coinDisplayDenom": {
+                    "type": "string",
+                    "description": "Human-readable display name (e.g., Elys, Cosmos)",
+                    "minLength": 1
                 },
                 "coinMinimalDenom": {
                     "type": "string",
@@ -119,12 +92,6 @@
                     "type": "string",
                     "description": "CoinGecko API identifier (can be empty)",
                     "pattern": "^[a-z0-9-]*$"
-                },
-                "coinImageUrl": {
-                    "type": "string",
-                    "description": "Path or URL to token image",
-                    "pattern": "^(/|https?://)",
-                    "minLength": 1
                 },
                 "canSwap": {
                     "type": "boolean",
@@ -168,11 +135,11 @@
             },
             "required": [
                 "coinDenom",
+                "coinDisplayDenom",
                 "coinMinimalDenom",
                 "coinIbcDenom",
                 "coinDecimals",
                 "coinGeckoId",
-                "coinImageUrl",
                 "canSwap",
                 "isFeeCurrency",
                 "isStakeCurrency",
