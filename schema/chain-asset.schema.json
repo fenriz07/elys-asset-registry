@@ -62,7 +62,7 @@
             "properties": {
                 "coinDenom": {
                     "type": "string",
-                    "description": "Display denomination (e.g., ELYS, ATOM)",
+                    "description": "Display denomination (e.g., ELYS, ATOM) - also used as base for CryptoCompare",
                     "pattern": "^[A-Z0-9]+$",
                     "minLength": 1,
                     "maxLength": 10
@@ -131,6 +131,9 @@
                 },
                 "gasPriceStep": {
                     "$ref": "#/definitions/GasPriceStep"
+                },
+                "cc": {
+                    "$ref": "#/definitions/CryptoCompareConfig"
                 }
             },
             "required": [
@@ -149,7 +152,41 @@
                 "canUseLeverageLP",
                 "canUsePerpetual",
                 "canUseVaults",
-                "gasPriceStep"
+                "gasPriceStep",
+                "cc"
+            ],
+            "additionalProperties": false
+        },
+        "CryptoCompareConfig": {
+            "type": "object",
+            "properties": {
+                "quote": {
+                    "type": "string",
+                    "description": "Quote currency for price pair (e.g., USDT, USD, BTC)",
+                    "pattern": "^[A-Z]+$",
+                    "minLength": 1,
+                    "maxLength": 10
+                },
+                "exchange": {
+                    "type": "string",
+                    "description": "Exchange name for price data",
+                    "enum": [
+                        "binance",
+                        "coinbase",
+                        "kraken",
+                        "gateio",
+                        "mexc",
+                        "kucoin",
+                        "huobi",
+                        "okx",
+                        "bitfinex",
+                        "bybit"
+                    ]
+                }
+            },
+            "required": [
+                "quote",
+                "exchange"
             ],
             "additionalProperties": false
         },

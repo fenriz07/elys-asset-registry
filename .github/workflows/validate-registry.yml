@@ -302,7 +302,6 @@ jobs:
     name: Performance Test
     runs-on: ubuntu-latest
     needs: validate-schema
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

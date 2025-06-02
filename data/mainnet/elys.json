@@ -32,6 +32,10 @@
                 "low": 0.01,
                 "average": 0.025,
                 "high": 0.03
+            },
+            "cc": {
+                "quote": "USDT",
+                "exchange": "gateio"
             }
         }
     ]
