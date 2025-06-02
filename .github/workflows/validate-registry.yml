@@ -34,30 +34,42 @@ jobs:
         run: |
           echo "🔍 Validating JSON syntax..."
           
-          # Validate mainnet.json syntax
-          if [ -f "data/mainnet.json" ]; then
-            echo "✅ Checking mainnet.json syntax..."
-            jsonlint data/mainnet.json
-          else
-            echo "❌ mainnet.json not found"
+          # Check if mainnet directory exists
+          if [ ! -d "data/mainnet" ]; then
+            echo "❌ data/mainnet directory not found"
             exit 1
           fi
           
-          # Validate testnet.json syntax
-          if [ -f "data/testnet.json" ]; then
-            echo "✅ Checking testnet.json syntax..."
-            jsonlint data/testnet.json
-          else
-            echo "❌ testnet.json not found"
+          # Check if testnet directory exists
+          if [ ! -d "data/testnet" ]; then
+            echo "❌ data/testnet directory not found"
             exit 1
           fi
+          
+          # Validate all mainnet JSON files
+          echo "✅ Checking mainnet JSON files..."
+          for file in data/mainnet/*.json; do
+            if [ -f "$file" ]; then
+              echo "  Validating $(basename "$file")..."
+              jsonlint "$file"
+            fi
+          done
+          
+          # Validate all testnet JSON files
+          echo "✅ Checking testnet JSON files..."
+          for file in data/testnet/*.json; do
+            if [ -f "$file" ]; then
+              echo "  Validating $(basename "$file")..."
+              jsonlint "$file"
+            fi
+          done
           
           # Validate schema syntax
-          if [ -f "schema/registry.schema.json" ]; then
+          if [ -f "schema/chain-asset.schema.json" ]; then
             echo "✅ Checking schema syntax..."
-            jsonlint schema/registry.schema.json
+            jsonlint schema/chain-asset.schema.json
           else
-            echo "❌ registry.schema.json not found"
+            echo "❌ chain-asset.schema.json not found"
             exit 1
           fi
           
@@ -65,43 +77,68 @@ jobs:
         run: |
           echo "🔍 Validating against JSON Schema..."
           
-          # Validate mainnet.json against schema
-          echo "✅ Validating mainnet.json against schema..."
-          ajv validate \
-            --spec=draft7 \
-            --strict=false \
-            --all-errors \
-            -s schema/registry.schema.json \
-            -d data/mainnet.json
+          # Validate all mainnet files against schema
+          echo "✅ Validating mainnet files against schema..."
+          for file in data/mainnet/*.json; do
+            if [ -f "$file" ]; then
+              echo "  Validating $(basename "$file") against schema..."
+              ajv validate \
+                --spec=draft7 \
+                --strict=false \
+                --all-errors \
+                -s schema/chain-asset.schema.json \
+                -d "$file"
+            fi
+          done
             
-          # Validate testnet.json against schema
-          echo "✅ Validating testnet.json against schema..."
-          ajv validate \
-            --spec=draft7 \
-            --strict=false \
-            --all-errors \
-            -s schema/registry.schema.json \
-            -d data/testnet.json
+          # Validate all testnet files against schema
+          echo "✅ Validating testnet files against schema..."
+          for file in data/testnet/*.json; do
+            if [ -f "$file" ]; then
+              echo "  Validating $(basename "$file") against schema..."
+              ajv validate \
+                --spec=draft7 \
+                --strict=false \
+                --all-errors \
+                -s schema/chain-asset.schema.json \
+                -d "$file"
+            fi
+          done
             
       - name: Validate business rules
         run: |
           echo "🔍 Validating business rules..."
           
-          # Check for duplicate chain IDs across networks
+          # Check for duplicate chain IDs across all networks
           echo "✅ Checking for duplicate chain IDs..."
           
-          MAINNET_CHAIN_IDS=$(jq -r '.chains[].chainId' data/mainnet.json | sort)
-          TESTNET_CHAIN_IDS=$(jq -r '.chains[].chainId' data/testnet.json | sort)
+          # Collect all chain IDs from mainnet
+          MAINNET_CHAIN_IDS=""
+          for file in data/mainnet/*.json; do
+            if [ -f "$file" ]; then
+              CHAIN_ID=$(jq -r '.chainId' "$file")
+              MAINNET_CHAIN_IDS="$MAINNET_CHAIN_IDS $CHAIN_ID"
+            fi
+          done
+          
+          # Collect all chain IDs from testnet
+          TESTNET_CHAIN_IDS=""
+          for file in data/testnet/*.json; do
+            if [ -f "$file" ]; then
+              CHAIN_ID=$(jq -r '.chainId' "$file")
+              TESTNET_CHAIN_IDS="$TESTNET_CHAIN_IDS $CHAIN_ID"
+            fi
+          done
           
           # Check for duplicates within mainnet
-          MAINNET_DUPLICATES=$(echo "$MAINNET_CHAIN_IDS" | uniq -d)
+          MAINNET_DUPLICATES=$(echo $MAINNET_CHAIN_IDS | tr ' ' '\n' | sort | uniq -d)
           if [ ! -z "$MAINNET_DUPLICATES" ]; then
             echo "❌ Duplicate chain IDs found in mainnet: $MAINNET_DUPLICATES"
             exit 1
           fi
           
           # Check for duplicates within testnet
-          TESTNET_DUPLICATES=$(echo "$TESTNET_CHAIN_IDS" | uniq -d)
+          TESTNET_DUPLICATES=$(echo $TESTNET_CHAIN_IDS | tr ' ' '\n' | sort | uniq -d)
           if [ ! -z "$TESTNET_DUPLICATES" ]; then
             echo "❌ Duplicate chain IDs found in testnet: $TESTNET_DUPLICATES"
             exit 1
@@ -110,11 +147,15 @@ jobs:
           # Check that all RPC/REST URLs are reachable (optional)
           echo "✅ Checking URL accessibility..."
           
-          # Extract and test mainnet URLs
-          jq -r '.chains[] | "\(.rpcURL) \(.restURL)"' data/mainnet.json | while read rpc rest; do
-            echo "Testing $rpc..."
-            if ! curl -s --connect-timeout 10 --max-time 30 "$rpc" > /dev/null; then
-              echo "⚠️  Warning: $rpc may not be accessible"
+          # Test mainnet URLs
+          for file in data/mainnet/*.json; do
+            if [ -f "$file" ]; then
+              CHAIN_NAME=$(basename "$file" .json)
+              RPC_URL=$(jq -r '.rpcURL' "$file")
+              echo "Testing $CHAIN_NAME RPC: $RPC_URL..."
+              if ! curl -s --connect-timeout 10 --max-time 30 "$RPC_URL" > /dev/null; then
+                echo "⚠️  Warning: $RPC_URL may not be accessible"
+              fi
             fi
           done
           
@@ -128,31 +169,58 @@ jobs:
           echo "**Commit:** ${{ github.sha }}" >> validation-report.md
           echo "" >> validation-report.md
           
-          # Count assets
-          MAINNET_COUNT=$(jq '.chains | length' data/mainnet.json)
-          TESTNET_COUNT=$(jq '.chains | length' data/testnet.json)
+          # Count mainnet chains
+          MAINNET_COUNT=$(find data/mainnet -name "*.json" -type f | wc -l)
+          TESTNET_COUNT=$(find data/testnet -name "*.json" -type f | wc -l)
           
           echo "**Statistics:**" >> validation-report.md
           echo "- Mainnet chains: $MAINNET_COUNT" >> validation-report.md
           echo "- Testnet chains: $TESTNET_COUNT" >> validation-report.md
           
-          # Count currencies
-          MAINNET_CURRENCIES=$(jq '[.chains[].currencies[]] | length' data/mainnet.json)
-          TESTNET_CURRENCIES=$(jq '[.chains[].currencies[]] | length' data/testnet.json)
+          # Count total currencies
+          MAINNET_CURRENCIES=0
+          for file in data/mainnet/*.json; do
+            if [ -f "$file" ]; then
+              COUNT=$(jq '[.currencies[]] | length' "$file")
+              MAINNET_CURRENCIES=$((MAINNET_CURRENCIES + COUNT))
+            fi
+          done
+          
+          TESTNET_CURRENCIES=0
+          for file in data/testnet/*.json; do
+            if [ -f "$file" ]; then
+              COUNT=$(jq '[.currencies[]] | length' "$file")
+              TESTNET_CURRENCIES=$((TESTNET_CURRENCIES + COUNT))
+            fi
+          done
           
           echo "- Mainnet currencies: $MAINNET_CURRENCIES" >> validation-report.md
           echo "- Testnet currencies: $TESTNET_CURRENCIES" >> validation-report.md
           echo "" >> validation-report.md
           
           echo "**Chain Status:**" >> validation-report.md
-          echo "| Chain | Network | Enabled | Priority |" >> validation-report.md
-          echo "|-------|---------|---------|----------|" >> validation-report.md
+          echo "| Chain | Network | Chain ID | Currencies |" >> validation-report.md
+          echo "|-------|---------|----------|------------|" >> validation-report.md
           
           # Mainnet chains
-          jq -r '.chains | to_entries[] | "| \(.key) | mainnet | \(.value.isEnabled) | \(.value.priority) |"' data/mainnet.json >> validation-report.md
+          for file in data/mainnet/*.json; do
+            if [ -f "$file" ]; then
+              CHAIN_NAME=$(basename "$file" .json)
+              CHAIN_ID=$(jq -r '.chainId' "$file")
+              CURRENCY_COUNT=$(jq '[.currencies[]] | length' "$file")
+              echo "| $CHAIN_NAME | mainnet | $CHAIN_ID | $CURRENCY_COUNT |" >> validation-report.md
+            fi
+          done
           
           # Testnet chains  
-          jq -r '.chains | to_entries[] | "| \(.key) | testnet | \(.value.isEnabled) | \(.value.priority) |"' data/testnet.json >> validation-report.md
+          for file in data/testnet/*.json; do
+            if [ -f "$file" ]; then
+              CHAIN_NAME=$(basename "$file" .json)
+              CHAIN_ID=$(jq -r '.chainId' "$file")
+              CURRENCY_COUNT=$(jq '[.currencies[]] | length' "$file")
+              echo "| $CHAIN_NAME | testnet | $CHAIN_ID | $CURRENCY_COUNT |" >> validation-report.md
+            fi
+          done
           
       - name: Upload validation report
         if: always()
@@ -213,22 +281,29 @@ jobs:
         run: |
           echo "🔒 Validating SSL certificates..."
           
-          # Extract HTTPS URLs and check certificates
-          jq -r '.chains[] | "\(.rpcURL) \(.restURL)"' data/mainnet.json | \
-          grep -E '^https://' | \
-          while read url; do
-            domain=$(echo "$url" | sed 's|https://||' | sed 's|:.*||')
-            echo "Checking SSL for $domain..."
-            
-            if ! echo | timeout 10 openssl s_client -connect "$domain:443" -servername "$domain" 2>/dev/null | grep -q "Verify return code: 0"; then
-              echo "⚠️  Warning: SSL certificate issue for $domain"
+          # Extract HTTPS URLs and check certificates from all chain files
+          for file in data/mainnet/*.json data/testnet/*.json; do
+            if [ -f "$file" ]; then
+              echo "Checking SSL certificates for $(basename "$file")..."
+              jq -r '.rpcURL, .restURL' "$file" | \
+              grep -E '^https://' | \
+              while read url; do
+                domain=$(echo "$url" | sed 's|https://||' | sed 's|:.*||')
+                echo "  Checking SSL for $domain..."
+                
+                if ! echo | timeout 10 openssl s_client -connect "$domain:443" -servername "$domain" 2>/dev/null | grep -q "Verify return code: 0"; then
+                  echo "  ⚠️  Warning: SSL certificate issue for $domain"
+                fi
+              done
             fi
           done
 
   performance-test:
     name: Performance Test
     runs-on: ubuntu-latest
-    needs: validate-schema    
+    needs: validate-schema
+    if: github.event_name == 'pull_request'
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -237,18 +312,22 @@ jobs:
         run: |
           echo "⚡ Testing endpoint performance..."
           
-          # Test RPC endpoints
-          jq -r '.chains[] | "\(.chainName): \(.rpcURL)"' data/mainnet.json | while IFS=': ' read name url; do
-            echo "Testing $name ($url)..."
-            
-            response_time=$(curl -w "%{time_total}" -s -o /dev/null --connect-timeout 10 --max-time 30 "$url" || echo "timeout")
-            
-            if [ "$response_time" = "timeout" ]; then
-              echo "❌ $name: Timeout"
-            elif (( $(echo "$response_time > 5.0" | bc -l) )); then
-              echo "⚠️  $name: Slow response (${response_time}s)"
-            else
-              echo "✅ $name: Fast response (${response_time}s)"
+          # Test RPC endpoints for all chains
+          for file in data/mainnet/*.json; do
+            if [ -f "$file" ]; then
+              CHAIN_NAME=$(basename "$file" .json)
+              RPC_URL=$(jq -r '.rpcURL' "$file")
+              echo "Testing $CHAIN_NAME ($RPC_URL)..."
+              
+              response_time=$(curl -w "%{time_total}" -s -o /dev/null --connect-timeout 10 --max-time 30 "$RPC_URL" || echo "timeout")
+              
+              if [ "$response_time" = "timeout" ]; then
+                echo "❌ $CHAIN_NAME: Timeout"
+              elif (( $(echo "$response_time > 5.0" | bc -l) )); then
+                echo "⚠️  $CHAIN_NAME: Slow response (${response_time}s)"
+              else
+                echo "✅ $CHAIN_NAME: Fast response (${response_time}s)"
+              fi
             fi
           done
           
@@ -256,17 +335,16 @@ jobs:
         run: |
           echo "📊 Checking file sizes..."
           
-          MAINNET_SIZE=$(stat -f%z data/mainnet.json 2>/dev/null || stat -c%s data/mainnet.json)
-          TESTNET_SIZE=$(stat -f%z data/testnet.json 2>/dev/null || stat -c%s data/testnet.json)
-          
-          echo "Mainnet.json size: ${MAINNET_SIZE} bytes"
-          echo "Testnet.json size: ${TESTNET_SIZE} bytes"
-          
-          # Warn if files are getting too large (> 1MB)
-          if [ "$MAINNET_SIZE" -gt 1048576 ]; then
-            echo "⚠️  Warning: mainnet.json is larger than 1MB"
-          fi
-          
-          if [ "$TESTNET_SIZE" -gt 1048576 ]; then
-            echo "⚠️  Warning: testnet.json is larger than 1MB"
-          fi
+          # Check individual chain file sizes
+          for file in data/mainnet/*.json data/testnet/*.json; do
+            if [ -f "$file" ]; then
+              FILE_SIZE=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file")
+              CHAIN_NAME=$(basename "$file")
+              echo "$CHAIN_NAME size: ${FILE_SIZE} bytes"
+              
+              # Warn if individual files are getting too large (> 100KB)
+              if [ "$FILE_SIZE" -gt 102400 ]; then
+                echo "⚠️  Warning: $CHAIN_NAME is larger than 100KB"
+              fi
+            fi
+          done
