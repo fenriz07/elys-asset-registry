@@ -1,14 +1,16 @@
 📊 Validation Report
 ===================
 
-**Date:** Tue Jun  3 22:46:18 UTC 2025
-**Commit:** 08e74c208b9f7ac60b311393903273db08842ef4
+**Date:** Tue Jun  3 22:54:42 UTC 2025
+**Commit:** ecc30efd1baa42596861b1cc40f9e92e8d7b27dc
 
 **Statistics:**
 - Mainnet chains: 16
 - Testnet chains: 7
 - Devnet chains: 1
 - Mainnet currencies: 21
+- Testnet currencies: 11
+- Devnet currencies: 3
 
 **Chain Status:**
 | Chain | Network | Chain ID | Currencies |
@@ -30,7 +32,6 @@
 | ssc-1 | mainnet | ssc-1 | 1 |
 | xion-mainnet-1 | mainnet | xion-mainnet-1 | 1 |
 
-- Testnet currencies: 11
 | Chain | Network | Chain ID | Currencies |
 |-------|---------|----------|------------|
 | cosmos | testnet | provider | 1 |
@@ -41,7 +42,6 @@
 | osmo-test-5 | testnet | osmo-test-5 | 1 |
 | xrpl-evm | testnet | xrplevm_1449000-1 | 1 |
 
-- Devnet currencies: 3
 | Chain | Network | Chain ID | Currencies |
 |-------|---------|----------|------------|
 | elys-1 | devnet | elysics-1 | 3 |
