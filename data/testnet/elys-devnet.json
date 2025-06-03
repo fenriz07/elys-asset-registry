@@ -4,7 +4,6 @@
     "addressPrefix": "elys",
     "rpcURL": "https://rpc.devnet.elys.network",
     "restURL": "https://api.devnet.elys.network",
-    "chainLogo": "/tokens/elys.svg",
     "explorerURL": {
         "transaction": "https://explorer.nodestake.org/elys-devnet/tx/{transaction}"
     },
