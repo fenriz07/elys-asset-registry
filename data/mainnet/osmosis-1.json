@@ -1,0 +1,42 @@
+{
+    "chainId": "osmosis-1",
+    "chainName": "Osmosis",
+    "addressPrefix": "osmo",
+    "rpcURL": "https://osmosis-rpc.polkachu.com",
+    "restURL": "https://osmosis-api.polkachu.com",
+    "explorerURL": {
+        "transaction": "https://www.mintscan.io/osmosis/tx/{transaction}"
+    },
+    "channel": {
+        "source": "channel-6",
+        "destination": "channel-91017"
+    },
+    "currencies": [
+        {
+            "coinDenom": "OSMO",
+            "coinMinimalDenom": "uosmo",
+            "coinDisplayDenom": "OSMO",
+            "coinIbcDenom": "ibc/646315E3B0461F5FA4C5C8968A88FC45D4D5D04A45B98F1B8294DD82F386DD85",
+            "coinDecimals": 6,
+            "coinGeckoId": "osmosis",
+            "isFeeCurrency": true,
+            "isStakeCurrency": false,
+            "canSwap": true,
+            "canWithdraw": true,
+            "canDeposit": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": true,
+            "canUsePerpetual": false,
+            "canUseVaults": true,
+            "gasPriceStep": {
+                "low": 0.0025,
+                "average": 0.025,
+                "high": 0.04
+            },
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}

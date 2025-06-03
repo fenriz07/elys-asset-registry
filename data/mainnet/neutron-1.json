@@ -1,0 +1,42 @@
+{
+    "chainId": "neutron-1",
+    "chainName": "Neutron",
+    "addressPrefix": "neutron",
+    "rpcURL": "https://rpc-voidara.neutron-1.neutron.org",
+    "restURL": "https://rest.lavenderfive.com/neutron",
+    "explorerURL": {
+        "transaction": "https://www.mintscan.io/neutron/transactions/{transaction}"
+    },
+    "channel": {
+        "source": "channel-16",
+        "destination": "channel-6476"
+    },
+    "currencies": [
+        {
+            "coinDenom": "NTRN",
+            "coinDisplayDenom": "NTRN",
+            "coinMinimalDenom": "untrn",
+            "coinIbcDenom": "ibc/8BFE59DCD5A7054F0A97CF91F3E3ABCA8C5BA454E548FA512B729D4004584D47",
+            "coinDecimals": 6,
+            "coinGeckoId": "",
+            "isFeeCurrency": true,
+            "isStakeCurrency": false,
+            "canSwap": true,
+            "canWithdraw": true,
+            "canDeposit": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": true,
+            "canUsePerpetual": false,
+            "canUseVaults": true,
+            "gasPriceStep": {
+                "low": 0.0053,
+                "average": 0.0053,
+                "high": 0.0053
+            },
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}

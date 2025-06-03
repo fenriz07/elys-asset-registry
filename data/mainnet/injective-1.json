@@ -19,7 +19,6 @@
             "coinIbcDenom": "ibc/ADF401C952ADD9EE232D52C8303B8BE17FE7953C8D420F20769AF77240BD0C58",
             "coinDecimals": 18,
             "coinGeckoId": "injective",
-            "coinImageUrl": "/tokens/inj.svg",
             "isStakeCurrency": false,
             "isFeeCurrency": true,
             "canSwap": true,

@@ -1,0 +1,42 @@
+{
+    "chainId": "mantra-1",
+    "chainName": "Mantra",
+    "addressPrefix": "mantra",
+    "rpcURL": "https://mantra-mainnet-rpc.itrocket.net:443",
+    "restURL": "https://mantra-mainnet-api.itrocket.net",
+    "explorerURL": {
+        "transaction": "https://mainnet.itrocket.net/mantra/transaction/{transaction}"
+    },
+    "channel": {
+        "source": "channel-11",
+        "destination": "channel-5"
+    },
+    "currencies": [
+        {
+            "coinDenom": "OM",
+            "coinDisplayDenom": "OM",
+            "coinMinimalDenom": "uom",
+            "coinIbcDenom": "ibc/B870E6642B6491779D35F326A895780FC2F7409DFD7F639A98505555AEAF345F",
+            "coinDecimals": 6,
+            "coinGeckoId": "",
+            "isFeeCurrency": true,
+            "isStakeCurrency": false,
+            "canSwap": true,
+            "canWithdraw": true,
+            "canDeposit": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": true,
+            "canUsePerpetual": false,
+            "canUseVaults": true,
+            "gasPriceStep": {
+                "low": 0.01,
+                "average": 0.02,
+                "high": 0.03
+            },
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}
