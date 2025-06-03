@@ -16,7 +16,7 @@
             "coinDenom": "ELYS",
             "coinDisplayDenom": "ELYS",
             "coinMinimalDenom": "uelys",
-            "coinIbcDenom": "uelys",
+            "coinIbcDenom": "",
             "coinDecimals": 6,
             "coinGeckoId": "elys-network",
             "canSwap": true,
