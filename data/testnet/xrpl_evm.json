@@ -1,0 +1,37 @@
+{
+    "chainId": "xrplevm_1449000-1",
+    "chainName": "XRPL EVM Testnet",
+    "addressPrefix": "ethm",
+    "rpcURL": "https://xrp-testnet-rpc.polkachu.com",
+    "restURL": "https://xrp-testnet-api.polkachu.com",
+    "explorerURL": {
+        "transaction": "https://governance.testnet.xrplevm.org/tx/{transaction}"
+    },
+    "channel": {
+        "source": "channel-10",
+        "destination": "channel-3"
+    },
+    "currencies": [
+        {
+            "coinDenom": "XRP",
+            "coinDisplayDenom": "XRP",
+            "coinMinimalDenom": "axrp",
+            "coinIbcDenom": "ibc/E925EC46A2F4B84815DB7218ADF272989DADD18372C779F68DB31A6BC4F91B7D",
+            "coinDecimals": 18,
+            "coinGeckoId": "xrp",
+            "isStakeCurrency": false,
+            "isFeeCurrency": true,
+            "canSwap": true,
+            "canDeposit": true,
+            "canWithdraw": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": true,
+            "canUsePerpetual": true,
+            "canUseVaults": true,
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}

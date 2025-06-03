@@ -1,14 +1,14 @@
 📊 Validation Report
 ===================
 
-**Date:** Tue Jun  3 16:20:38 UTC 2025
-**Commit:** 4890e3a131a5afddf097096baca7e3db740f32d4
+**Date:** Tue Jun  3 17:28:39 UTC 2025
+**Commit:** e6a5c432ef0935f1464f23c2ba4d99b584963d0d
 
 **Statistics:**
 - Mainnet chains: 16
-- Testnet chains: 1
+- Testnet chains: 3
 - Mainnet currencies: 21
-- Testnet currencies: 1
+- Testnet currencies: 5
 
 **Chain Status:**
 **Mainnet Chains:**
@@ -34,4 +34,6 @@
 **Testnet Chains:**
 | Chain | Network | Chain ID | Currencies |
 |-------|---------|----------|------------|
-| Elys | testnet | elys-1 | 1 |
+| Cosmos Hub (testnet) | testnet | provider | 1 |
+| Elys Network (testnet) | testnet | elysicstestnet-1 | 3 |
+| Noble (testnet) | testnet | grand-1 | 1 |

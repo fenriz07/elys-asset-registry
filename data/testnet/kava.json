@@ -1,0 +1,37 @@
+{
+    "chainId": "kava_2221-16000",
+    "chainName": "Kava (testnet)",
+    "addressPrefix": "kava",
+    "rpcURL": "https://rpc.testnet.kava.io",
+    "restURL": "https://api.testnet.kava.io",
+    "explorerURL": {
+        "transaction": "https://www.mintscan.io/kava-testnet/tx/{transaction}"
+    },
+    "channel": {
+        "source": "channel-7",
+        "destination": "channel-79"
+    },
+    "currencies": [
+        {
+            "coinDenom": "KAVA",
+            "coinDisplayDenom": "KAVA",
+            "coinMinimalDenom": "ukava",
+            "coinIbcDenom": "ibc/CC5AF426682C833A9BB0286C3BD32154D5A0009F2D0A1E5EF090283EDAA371E9",
+            "coinDecimals": 6,
+            "coinGeckoId": "kava",
+            "isStakeCurrency": false,
+            "isFeeCurrency": false,
+            "canSwap": true,
+            "canWithdraw": false,
+            "canDeposit": false,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": false,
+            "canUsePerpetual": false,
+            "canUseVaults": false,
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}
