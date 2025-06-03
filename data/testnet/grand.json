@@ -4,7 +4,6 @@
     "addressPrefix": "noble",
     "rpcURL": "https://noble-testnet-rpc.polkachu.com",
     "restURL": "https://api.testnet.noble.strange.love",
-    "chainLogo": "/tokens/noble.svg",
     "explorerURL": {
         "transaction": "https://testnet.mintscan.io/noble-testnet/txs/{transaction}"
     },
@@ -21,6 +20,7 @@
             "coinDecimals": 6,
             "coinGeckoId": "usd-coin",
             "isFeeCurrency": true,
+            "isStakeCurrency": false,
             "canSwap": true,
             "canWithdraw": true,
             "canDeposit": true,
