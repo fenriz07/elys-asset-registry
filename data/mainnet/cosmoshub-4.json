@@ -87,7 +87,6 @@
             "coinIbcDenom": "ibc/68B5E8DA9270FA00245484BB1C07AD75399AD67D54A1344F6E998B5FB69B664F",
             "coinDecimals": 18,
             "coinGeckoId": "pax-gold",
-            "coinImageUrl": "/tokens/paxg.svg",
             "isFeeCurrency": true,
             "isStakeCurrency": false,
             "canSwap": true,
