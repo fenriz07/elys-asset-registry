@@ -1,14 +1,14 @@
 📊 Validation Report
 ===================
 
-**Date:** Tue Jun  3 17:28:39 UTC 2025
-**Commit:** e6a5c432ef0935f1464f23c2ba4d99b584963d0d
+**Date:** Tue Jun  3 18:07:07 UTC 2025
+**Commit:** d5029586e0950aea76518987252270db185fd1e6
 
 **Statistics:**
 - Mainnet chains: 16
-- Testnet chains: 3
+- Testnet chains: 7
 - Mainnet currencies: 21
-- Testnet currencies: 5
+- Testnet currencies: 11
 
 **Chain Status:**
 **Mainnet Chains:**
@@ -35,5 +35,9 @@
 | Chain | Network | Chain ID | Currencies |
 |-------|---------|----------|------------|
 | Cosmos Hub (testnet) | testnet | provider | 1 |
+| Elys Network (devnet) | testnet | elysdevnet | 3 |
 | Elys Network (testnet) | testnet | elysicstestnet-1 | 3 |
 | Noble (testnet) | testnet | grand-1 | 1 |
+| Kava (testnet) | testnet | kava_2221-16000 | 1 |
+| Osmosis (testnet) | testnet | osmo-test-5 | 1 |
+| XRPL EVM Testnet | testnet | xrplevm_1449000-1 | 1 |
