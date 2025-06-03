@@ -1,0 +1,80 @@
+{
+    "chainId": "elysdevnet",
+    "chainName": "Elys Network (devnet)",
+    "addressPrefix": "elys",
+    "rpcURL": "https://rpc.devnet.elys.network",
+    "restURL": "https://api.devnet.elys.network",
+    "chainLogo": "/tokens/elys.svg",
+    "explorerURL": {
+        "transaction": "https://explorer.nodestake.org/elys-devnet/tx/{transaction}"
+    },
+    "channel": {
+        "source": "channel-9",
+        "destination": "channel-0"
+    },
+    "currencies": [
+        {
+            "coinDenom": "ETH",
+            "coinDisplayDenom": "ETH",
+            "coinMinimalDenom": "aeth",
+            "coinIbcDenom": "ibc/7AF2CE292180478DBC92CF6612F0FF7A97A687076DA2406BEF0552B43AA0A3C2",
+            "coinDecimals": 18,
+            "coinGeckoId": "ethereum",
+            "isFeeCurrency": true,
+            "isStakeCurrency": false,
+            "canSwap": true,
+            "canDeposit": true,
+            "canWithdraw": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": false,
+            "canUsePerpetual": true,
+            "canUseVaults": false,
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        },
+        {
+            "coinDenom": "WBTC",
+            "coinDisplayDenom": "wBTC",
+            "coinMinimalDenom": "ubtc",
+            "coinIbcDenom": "ibc/127E6A6A61F4681A1780F760B4230E515ED4D2D5FFFE5965CB66A723BBE06A70",
+            "coinDecimals": 8,
+            "coinGeckoId": "bitcoin",
+            "isFeeCurrency": true,
+            "isStakeCurrency": false,
+            "canSwap": true,
+            "canDeposit": true,
+            "canWithdraw": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": false,
+            "canUsePerpetual": true,
+            "canUseVaults": false,
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        },
+        {
+            "coinDenom": "FET",
+            "coinDisplayDenom": "FET",
+            "coinMinimalDenom": "afet",
+            "coinIbcDenom": "ibc/0A67EE2EA6A666FA03EEB15B87426FFD8712F2536A56AB36A864329B9B2FDFCD",
+            "coinDecimals": 18,
+            "coinGeckoId": "artificial-superintelligence-alliance",
+            "isFeeCurrency": false,
+            "isStakeCurrency": false,
+            "canSwap": true,
+            "canDeposit": true,
+            "canWithdraw": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": true,
+            "canUsePerpetual": true,
+            "canUseVaults": true,
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}
