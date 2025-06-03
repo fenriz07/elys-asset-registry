@@ -20,6 +20,7 @@
             "coinDecimals": 6,
             "coinGeckoId": "kava",
             "isFeeCurrency": true,
+            "isStakeCurrency": false,
             "canSwap": true,
             "canWithdraw": true,
             "canDeposit": true,
