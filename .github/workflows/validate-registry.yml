@@ -250,6 +250,9 @@ jobs:
           done
           
           echo "- Mainnet currencies: $MAINNET_CURRENCIES" >> validation-report.md
+          echo "- Testnet currencies: $TESTNET_CURRENCIES" >> validation-report.md
+          echo "- Devnet currencies: $DEVNET_CURRENCIES" >> validation-report.md
+
           echo "" >> validation-report.md
           
           echo "**Chain Status:**" >> validation-report.md
@@ -268,7 +271,6 @@ jobs:
 
                     
           echo "" >> validation-report.md
-          echo "- Testnet currencies: $TESTNET_CURRENCIES" >> validation-report.md
           echo "| Chain | Network | Chain ID | Currencies |" >> validation-report.md
           echo "|-------|---------|----------|------------|" >> validation-report.md
           
@@ -284,7 +286,6 @@ jobs:
           
           # Devnet chains
           echo "" >> validation-report.md
-          echo "- Devnet currencies: $DEVNET_CURRENCIES" >> validation-report.md
           echo "| Chain | Network | Chain ID | Currencies |" >> validation-report.md
           echo "|-------|---------|----------|------------|" >> validation-report.md
 

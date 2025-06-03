@@ -1,43 +1,47 @@
 📊 Validation Report
 ===================
 
-**Date:** Tue Jun  3 18:07:07 UTC 2025
-**Commit:** d5029586e0950aea76518987252270db185fd1e6
+**Date:** Tue Jun  3 22:46:18 UTC 2025
+**Commit:** 08e74c208b9f7ac60b311393903273db08842ef4
 
 **Statistics:**
 - Mainnet chains: 16
 - Testnet chains: 7
+- Devnet chains: 1
 - Mainnet currencies: 21
-- Testnet currencies: 11
 
 **Chain Status:**
-**Mainnet Chains:**
 | Chain | Network | Chain ID | Currencies |
 |-------|---------|----------|------------|
-| Akash | mainnet | akashnet-2 | 1 |
-| Axelar | mainnet | axelar-dojo-1 | 1 |
-| Babylon | mainnet | bbn-1 | 1 |
-| Celestia | mainnet | celestia | 1 |
-| Cosmos Hub | mainnet | cosmoshub-4 | 4 |
-| Elys Network | mainnet | elys-1 | 3 |
-| Fetch Hub | mainnet | fetchhub-4 | 1 |
-| Injective | mainnet | injective-1 | 1 |
-| Kava | mainnet | kava_2222-10 | 1 |
-| Mantra | mainnet | mantra-1 | 1 |
-| Neutron | mainnet | neutron-1 | 1 |
-| Noble | mainnet | noble-1 | 1 |
-| Osmosis | mainnet | osmosis-1 | 1 |
-| Secret Network | mainnet | secret-4 | 1 |
-| Saga | mainnet | ssc-1 | 1 |
-| Xion | mainnet | xion-mainnet-1 | 1 |
+| akashnet-2 | mainnet | akashnet-2 | 1 |
+| axelar-dojo-1 | mainnet | axelar-dojo-1 | 1 |
+| bbn-1 | mainnet | bbn-1 | 1 |
+| celestia | mainnet | celestia | 1 |
+| cosmoshub-4 | mainnet | cosmoshub-4 | 4 |
+| elys-1 | mainnet | elys-1 | 3 |
+| fetchhub-4 | mainnet | fetchhub-4 | 1 |
+| injective-1 | mainnet | injective-1 | 1 |
+| kava_2222-10 | mainnet | kava_2222-10 | 1 |
+| mantra-1 | mainnet | mantra-1 | 1 |
+| neutron-1 | mainnet | neutron-1 | 1 |
+| noble-1 | mainnet | noble-1 | 1 |
+| osmosis-1 | mainnet | osmosis-1 | 1 |
+| secret-4 | mainnet | secret-4 | 1 |
+| ssc-1 | mainnet | ssc-1 | 1 |
+| xion-mainnet-1 | mainnet | xion-mainnet-1 | 1 |
 
-**Testnet Chains:**
+- Testnet currencies: 11
 | Chain | Network | Chain ID | Currencies |
 |-------|---------|----------|------------|
-| Cosmos Hub (testnet) | testnet | provider | 1 |
-| Elys Network (devnet) | testnet | elysdevnet | 3 |
-| Elys Network (testnet) | testnet | elysicstestnet-1 | 3 |
-| Noble (testnet) | testnet | grand-1 | 1 |
-| Kava (testnet) | testnet | kava_2221-16000 | 1 |
-| Osmosis (testnet) | testnet | osmo-test-5 | 1 |
-| XRPL EVM Testnet | testnet | xrplevm_1449000-1 | 1 |
+| cosmos | testnet | provider | 1 |
+| elys-devnet | testnet | elysdevnet | 3 |
+| elys | testnet | elysicstestnet-1 | 3 |
+| grand | testnet | grand-1 | 1 |
+| kava | testnet | kava_2221-16000 | 1 |
+| osmo-test-5 | testnet | osmo-test-5 | 1 |
+| xrpl-evm | testnet | xrplevm_1449000-1 | 1 |
+
+- Devnet currencies: 3
+| Chain | Network | Chain ID | Currencies |
+|-------|---------|----------|------------|
+| elys-1 | devnet | elysics-1 | 3 |
