@@ -63,9 +63,9 @@
                 "coinDenom": {
                     "type": "string",
                     "description": "Display denomination (e.g., ELYS, ATOM) - also used as base for CryptoCompare",
-                    "pattern": "^[A-Z0-9]+$",
+                    "pattern": "^[A-Z0-9 ]+$",
                     "minLength": 1,
-                    "maxLength": 10
+                    "maxLength": 15
                 },
                 "coinDisplayDenom": {
                     "type": "string",
