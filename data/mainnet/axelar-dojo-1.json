@@ -1,0 +1,42 @@
+{
+    "chainId": "axelar-dojo-1",
+    "chainName": "Axelar",
+    "addressPrefix": "axelar",
+    "rpcURL": "https://axelar-rpc.publicnode.com:443",
+    "restURL": "https://axelar-rest.publicnode.com",
+    "explorerURL": {
+        "transaction": "https://testnet.mintscan.io/axelar-testnet/txs/{transaction}"
+    },
+    "channel": {
+        "source": "channel-3",
+        "destination": "channel-163"
+    },
+    "currencies": [
+        {
+            "coinDenom": "AXL",
+            "coinDisplayDenom": "AXL",
+            "coinMinimalDenom": "uaxl",
+            "coinIbcDenom": "ibc/9463E39D230614B313B487836D13A392BD1731928713D4C8427A083627048DB3",
+            "coinDecimals": 6,
+            "coinGeckoId": "axelar",
+            "canSwap": false,
+            "isFeeCurrency": false,
+            "isStakeCurrency": false,
+            "canWithdraw": false,
+            "canDeposit": false,
+            "canUseLiquidityMining": false,
+            "canUseLeverageLP": false,
+            "canUsePerpetual": false,
+            "canUseVaults": false,
+            "gasPriceStep": {
+                "low": 0.007,
+                "average": 0.007,
+                "high": 0.01
+            },
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}
