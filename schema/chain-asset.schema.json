@@ -151,9 +151,7 @@
                 "canUseLiquidityMining",
                 "canUseLeverageLP",
                 "canUsePerpetual",
-                "canUseVaults",
-                "gasPriceStep",
-                "cc"
+                "canUseVaults"
             ],
             "additionalProperties": false
         },

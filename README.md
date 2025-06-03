@@ -85,7 +85,7 @@ curl https://registry.elys.network/mainnet/elys
 }
 ```
 
-## 🔧 Integration Examplesç
+## 🔧 Integration Examples
 
 ### JavaScript/Node.js
 ```javascript
@@ -301,7 +301,7 @@ elys-asset-registry/
 │       └─ validate-registry.yml        CI for validatio     
 ├──📄 .version
 └──📄 README.md
-
+```
 
 ### Validation Rules
 
