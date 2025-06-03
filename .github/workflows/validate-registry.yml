@@ -205,7 +205,7 @@ jobs:
           # Mainnet chains
           for file in data/mainnet/*.json; do
             if [ -f "$file" ]; then
-              CHAIN_NAME=$(basename "$file" .json)
+              CHAIN_NAME=$(jq -r '.chainName' "$file")
               CHAIN_ID=$(jq -r '.chainId' "$file")
               CURRENCY_COUNT=$(jq '[.currencies[]] | length' "$file")
               echo "| $CHAIN_NAME | mainnet | $CHAIN_ID | $CURRENCY_COUNT |" >> validation-report.md
