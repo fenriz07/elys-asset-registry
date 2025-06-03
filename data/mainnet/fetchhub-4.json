@@ -1,0 +1,42 @@
+{
+    "chainId": "fetchhub-4",
+    "chainName": "Fetch Hub",
+    "addressPrefix": "fetch",
+    "rpcURL": "https://fetch-rpc.w3coins.io",
+    "restURL": "https://fetch-api.w3coins.io",
+    "explorerURL": {
+        "transaction": "https://www.mintscan.io/fetchai/tx/{transaction}"
+    },
+    "channel": {
+        "source": "channel-7",
+        "destination": "channel-34"
+    },
+    "currencies": [
+        {
+            "coinDenom": "FET",
+            "coinDisplayDenom": "FET",
+            "coinMinimalDenom": "afet",
+            "coinIbcDenom": "ibc/421AE2B1D80E42890BF227DBC56C3CADEDA050F21AD1B5DDC1EBE9B9737A4DC6",
+            "coinDecimals": 18,
+            "coinGeckoId": "fetchai",
+            "isStakeCurrency": false,
+            "isFeeCurrency": true,
+            "canSwap": true,
+            "canWithdraw": true,
+            "canDeposit": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": true,
+            "canUsePerpetual": false,
+            "canUseVaults": true,
+            "gasPriceStep": {
+                "low": 0.025,
+                "average": 0.025,
+                "high": 0.035
+            },
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}

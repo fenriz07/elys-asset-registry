@@ -1,0 +1,38 @@
+{
+    "chainId": "injective-1",
+    "chainName": "Injective",
+    "addressPrefix": "inj",
+    "rpcURL": "https://injective-rpc.polkachu.com",
+    "restURL": "https://injective-api.polkachu.com",
+    "explorerURL": {
+        "transaction": "https://www.mintscan.io/injective/tx/{transaction}"
+    },
+    "channel": {
+        "source": "channel-10",
+        "destination": "channel-421"
+    },
+    "currencies": [
+        {
+            "coinDenom": "INJ",
+            "coinDisplayDenom": "INJ",
+            "coinMinimalDenom": "inj",
+            "coinIbcDenom": "ibc/ADF401C952ADD9EE232D52C8303B8BE17FE7953C8D420F20769AF77240BD0C58",
+            "coinDecimals": 18,
+            "coinGeckoId": "injective",
+            "coinImageUrl": "/tokens/inj.svg",
+            "isStakeCurrency": false,
+            "isFeeCurrency": true,
+            "canSwap": true,
+            "canWithdraw": true,
+            "canDeposit": true,
+            "canUseLiquidityMining": true,
+            "canUseLeverageLP": true,
+            "canUsePerpetual": false,
+            "canUseVaults": true,
+            "cc": {
+                "quote": "USDT",
+                "exchange": "binance"
+            }
+        }
+    ]
+}
