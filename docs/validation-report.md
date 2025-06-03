@@ -1,8 +1,8 @@
 📊 Validation Report
 ===================
 
-**Date:** Tue Jun  3 16:15:39 UTC 2025
-**Commit:** 90a68ec52a50cfdc1fbb1f292a3599d58f205ff3
+**Date:** Tue Jun  3 16:20:38 UTC 2025
+**Commit:** 4890e3a131a5afddf097096baca7e3db740f32d4
 
 **Statistics:**
 - Mainnet chains: 16
@@ -11,6 +11,7 @@
 - Testnet currencies: 1
 
 **Chain Status:**
+**Mainnet Chains:**
 | Chain | Network | Chain ID | Currencies |
 |-------|---------|----------|------------|
 | Akash | mainnet | akashnet-2 | 1 |
@@ -29,4 +30,8 @@
 | Secret Network | mainnet | secret-4 | 1 |
 | Saga | mainnet | ssc-1 | 1 |
 | Xion | mainnet | xion-mainnet-1 | 1 |
-| elys | testnet | elys-1 | 1 |
+
+**Testnet Chains:**
+| Chain | Network | Chain ID | Currencies |
+|-------|---------|----------|------------|
+| Elys | testnet | elys-1 | 1 |
