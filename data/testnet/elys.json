@@ -14,8 +14,9 @@
     "currencies": [
         {
             "coinDenom": "ELYS",
+            "coinDisplayDenom": "ELYS",
             "coinMinimalDenom": "uelys",
-            "coinIbcDenom": "uelys",
+            "coinIbcDenom": "",
             "coinDecimals": 6,
             "coinGeckoId": "elys-network",
             "isFeeCurrency": true,
@@ -41,7 +42,7 @@
             "coinDenom": "EDEN BOOST",
             "coinDisplayDenom": "EDEN BOOST",
             "coinMinimalDenom": "uedenb",
-            "coinIbcDenom": "uedenb",
+            "coinIbcDenom": "",
             "coinDecimals": 6,
             "coinGeckoId": "uedenb",
             "isFeeCurrency": false,
@@ -58,7 +59,7 @@
             "coinDenom": "EDEN",
             "coinDisplayDenom": "EDEN",
             "coinMinimalDenom": "ueden",
-            "coinIbcDenom": "ueden",
+            "coinIbcDenom": "",
             "coinDecimals": 6,
             "coinGeckoId": "ueden",
             "isFeeCurrency": false,
