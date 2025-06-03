@@ -20,14 +20,14 @@
         },
         "rpcURL": {
             "type": "string",
-            "description": "RPC endpoint URL with optional port",
-            "pattern": "^https?://[a-zA-Z0-9.-]+(:[0-9]{1,5})?$",
+            "description": "RPC endpoint URL with optional port and path",
+            "pattern": "^https?://[a-zA-Z0-9.-]+(:[0-9]{1,5})?(/.*)?$",
             "minLength": 1
         },
         "restURL": {
             "type": "string",
-            "description": "REST API endpoint URL with optional port",
-            "pattern": "^https?://[a-zA-Z0-9.-]+(:[0-9]{1,5})?$",
+            "description": "REST API endpoint URL with optional port and path",
+            "pattern": "^https?://[a-zA-Z0-9.-]+(:[0-9]{1,5})?(/.*)?$",
             "minLength": 1
         },
         "explorerURL": {
