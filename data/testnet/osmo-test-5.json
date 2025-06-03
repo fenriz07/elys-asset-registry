@@ -20,6 +20,7 @@
             "coinDecimals": 6,
             "isStakeCurrency": false,
             "isFeeCurrency": false,
+                        "coinGeckoId": "osmosis",
             "canSwap": true,
             "canDeposit": false,
             "canWithdraw": false,
