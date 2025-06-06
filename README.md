@@ -19,22 +19,20 @@ The registry is available as static JSON files:
 ```bash
 # Complete registry
 # Mainnet chains and assets only
-curl https://registry.elys.network/mainnet
+curl https://registry.elys.network/v1/chains/mainnet
 # Testnet chains and assets only
-curl https://registry.elys.network/testnet
-# Validation schema
-curl https://registry.elys.network/schema
-# Only mainnet elys assets
-curl https://registry.elys.network/mainnet/elys
+curl https://registry.elys.network/v1/chains/testnet
+# List all currencies across mainnet network	
+curl https://registry.elys.network/v1/currencies/mainnet
 ```
 
 ### Available Endpoints
 
 | Endpoint | Description |
 |----------|-------------|
-| `/mainnet/chains` | Mainnet chains only |
-| `/testnet/chains` | Testnet chains only |
-| `/mainnet/chains/elys` | Mainnet elys assets only |
+| `/chains/mainnet` | Mainnet chains only |
+| `/chains/testnet` | Testnet chains only |
+| `/currencies/mainnet` | Mainnetassets only |
 
 ## 📊 Data Structure
 
@@ -90,7 +88,7 @@ curl https://registry.elys.network/mainnet/elys
 ### JavaScript/Node.js
 ```javascript
 
-const response = await fetch('https://registry.elys.network/mainnet');
+const response = await fetch('https://registry.elys.network/v1/chains/mainnet');
 const registry = await response.json();
 
 const elysChain = registry.chains.elys;
@@ -132,7 +130,7 @@ type Currency struct {
 }
 
 func main() {
-    resp, err := http.Get("https://registry.elys.network/mainnet")
+    resp, err := http.Get("https://registry.elys.network/v1/chains/mainnet")
     if err != nil {
         panic(err)
     }
@@ -156,7 +154,7 @@ import java.net.http.HttpResponse;
 import java.net.URI;
 
 public class ElysRegistryClient {
-    private static final String REGISTRY_URL = "https://registry.elys.network/mainnet";
+    private static final String REGISTRY_URL = "https://registry.elys.network/v1/chains/mainnet";
     
     public static class AssetRegistry {
         public Map<String, ChainAsset> chains;
