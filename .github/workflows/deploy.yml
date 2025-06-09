@@ -1,0 +1,55 @@
+# .github/workflows/trigger-deploy.yml
+name: Trigger Elys Registry API
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'data/**'
+      - 'schema/**'
+
+jobs:
+  trigger-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Validate repository access
+        run: |
+          if [ -z "${{ secrets.PRIVATE_REPO_TOKEN }}" ]; then
+            echo "❌ PRIVATE_REPO_TOKEN is not set"
+            exit 1
+          fi
+          echo "✅ Token is configured"
+        
+      - name: Trigger deployment in private repo
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          repository: ${{ secrets.PRIVATE_REPO_API }}  
+          event-type: deploy-assets
+          client-payload: |
+            {
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}",
+              "repository": "${{ github.repository }}",
+              "actor": "${{ github.actor }}",
+              "timestamp": "${{ github.event.head_commit.timestamp }}",
+              "message": "${{ github.event.head_commit.message }}",
+              "workflow_run_id": "${{ github.run_id }}"
+            }
+        continue-on-error: false
+        
+      - name: Log deployment trigger
+        run: |
+          echo "🚀 Deployment triggered successfully"
+          echo "Repository: ${{ github.repository }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Triggered by: ${{ github.actor }}"
+          
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Failed to trigger deployment"
+          echo "Check token permissions and repository access"
