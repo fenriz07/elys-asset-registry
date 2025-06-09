@@ -4,9 +4,6 @@ name: Trigger Elys Registry API
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'data/**'
-      - 'schema/**'
 
 jobs:
   trigger-deploy:
