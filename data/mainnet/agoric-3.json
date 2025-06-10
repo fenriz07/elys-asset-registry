@@ -30,7 +30,7 @@
             "canUseVaults": false,
             "cc": {
                 "quote": "USDT",
-                "exchange": "gate"
+                "exchange": "gateio"
             }
         }
     ]
