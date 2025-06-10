@@ -12,27 +12,42 @@ Official Elys Network asset registry providing standardized blockchain and token
 
 ## 🚀 Quick Start
 
-### Direct JSON Access
-
-The registry is available as static JSON files:
+### Basic Usage
 
 ```bash
-# Complete registry
-# Mainnet chains and assets only
+# Get all mainnet chains
 curl https://registry.elys.network/v1/chains/mainnet
-# Testnet chains and assets only
-curl https://registry.elys.network/v1/chains/testnet
-# List all currencies across mainnet network	
+
+# Get all currencies across mainnet networks
 curl https://registry.elys.network/v1/currencies/mainnet
+
+# Check API health
+curl https://registry.elys.network/health
 ```
 
-### Available Endpoints
+## 📡 API Endpoints
 
-| Endpoint | Description |
-|----------|-------------|
-| `/chains/mainnet` | Mainnet chains only |
-| `/chains/testnet` | Testnet chains only |
-| `/currencies/mainnet` | Mainnetassets only |
+### Chain Endpoints
+
+| Method | Endpoint | Description | Status |
+|--------|----------|-------------|--------|
+| `GET` | `/v1/chains/mainnet` | List all mainnet chains | ✅ Available |
+| `GET` | `/v1/chains/testnet` | List all testnet chains | ✅ Available |
+| `GET` | `/v1/chains/devnet`  | List all devnet chains | ✅ Available |
+
+### Currency Endpoints
+
+| Method | Endpoint | Description | Status |
+|--------|----------|-------------|--------|
+| `GET` | `/v1/currencies/mainnet` | List all currencies across mainnet network | ✅ Available |
+| `GET` | `/v1/currencies/testnet` | List all currencies across testnet network | ✅ Available  |
+| `GET` | `/v1/currencies/devnet` | List all currencies across devnet networks |  ✅ Available  |
+
+### Utility Endpoints
+
+| Method | Endpoint | Description | Status |
+|--------|----------|-------------|--------|
+| `GET` | `/health` | API health status | ✅ Available |
 
 ## 📊 Data Structure
 
