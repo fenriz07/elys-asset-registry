@@ -5,7 +5,7 @@
     "rpcURL": "https://main.rpc.agoric.net:443",
     "restURL": "https://main.api.agoric.net:443",
     "explorerURL": {
-        "transaction": "https: //agoric.explorers.guru/transaction/{transaction}"
+        "transaction": "https://agoric.explorers.guru/transaction/{transaction}"
     },
     "channel": {
         "source": "channel-12",
